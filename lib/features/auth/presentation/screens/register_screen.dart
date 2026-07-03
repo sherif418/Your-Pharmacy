@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/core/constants/app_colors.dart';
 import 'package:flutter_application_1/core/constants/app_sizes.dart';
 import 'package:flutter_application_1/core/constants/app_strings.dart';
+import 'package:flutter_application_1/core/validators/app_validators.dart';
 import 'package:flutter_application_1/core/widgets/app_logo.dart';
-import 'package:flutter_application_1/core/widgets/custom_button.dart';
 import 'package:flutter_application_1/core/widgets/custom_text_field.dart';
 import 'package:flutter_application_1/features/auth/bloc/auth_bloc.dart';
 import 'package:flutter_application_1/service_locator.dart';
@@ -25,7 +25,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -33,50 +32,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
-  /// 'customer' or 'pharmacist'
-  String? _selectedRole;
+  String? _selectedRole = 'customer'; // Default role is customer
+  String? _selectedVillage;
+
+  final List<String> _villages = const [
+    'قرية السلام',
+    'قرية الأمل',
+    'قرية النور',
+    'قرية الروضة',
+    'قرية السعادة',
+  ];
 
   @override
   void dispose() {
     _nameController.dispose();
-    _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
-  }
-
-  // ── Validators ──────────────────────────────────────────────
-  String? _validateName(String? v) {
-    if (v == null || v.trim().isEmpty) return AppStrings.errorEmptyField;
-    if (v.trim().length < 3) return AppStrings.errorShortName;
-    return null;
-  }
-
-  String? _validateEmail(String? v) {
-    if (v == null || v.trim().isEmpty) return AppStrings.errorEmptyField;
-    final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-    if (!emailRegex.hasMatch(v.trim())) return AppStrings.errorInvalidEmail;
-    return null;
-  }
-
-  String? _validatePhone(String? v) {
-    if (v == null || v.trim().isEmpty) return AppStrings.errorEmptyField;
-    final phoneRegex = RegExp(r'^01[0-9]{9}$');
-    if (!phoneRegex.hasMatch(v.trim())) return AppStrings.errorInvalidPhone;
-    return null;
-  }
-
-  String? _validatePassword(String? v) {
-    if (v == null || v.isEmpty) return AppStrings.errorEmptyField;
-    if (v.length < 6) return AppStrings.errorWeakPassword;
-    return null;
-  }
-
-  String? _validateConfirm(String? v) {
-    if (v == null || v.isEmpty) return AppStrings.errorEmptyField;
-    if (v != _passwordController.text) return AppStrings.errorPasswordMismatch;
-    return null;
   }
 
   void _onRegisterPressed(BuildContext context) {
@@ -90,14 +63,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       return;
     }
+    if (_selectedVillage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('من فضلك اختر قريتك'),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
     if (_formKey.currentState!.validate()) {
+      final String phone = _phoneController.text.trim();
+      final String email = '$phone@sidleitak.com'; // Auto synthetic email
+
       context.read<AuthBloc>().add(
             AuthRegisterRequested(
               name: _nameController.text.trim(),
-              email: _emailController.text.trim(),
-              phone: _phoneController.text.trim(),
+              email: email,
+              phone: phone,
               password: _passwordController.text,
               role: _selectedRole!,
+              village: _selectedVillage!,
             ),
           );
     }
@@ -118,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               barrierDismissible: false,
               builder: (_) => AlertDialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.radiusLG),
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
                 title: Row(
                   children: const [
@@ -158,8 +145,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (context, state) {
           final isLoading = state is AuthLoading;
           return Scaffold(
+            backgroundColor: AppColors.background,
             appBar: AppBar(
-              title: const Text(AppStrings.registerTitle),
+              title: const Text(
+                AppStrings.registerTitle,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
               foregroundColor: AppColors.primary,
@@ -167,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             body: SafeArea(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.paddingHorizontal,
+                  horizontal: AppSizes.paddingHorizontal * 1.5,
                   vertical: AppSizes.paddingVertical,
                 ),
                 child: Form(
@@ -175,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: AppSizes.spaceMD),
+                      const SizedBox(height: AppSizes.spaceXS),
 
                       // ── Logo (small) ─────────────────────────────
                       const AppLogo(size: AppSizes.logoSizeSM, showName: false),
@@ -186,18 +177,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: AppStrings.registerNameHint,
                         controller: _nameController,
                         keyboardType: TextInputType.name,
-                        validator: _validateName,
-                        prefixIcon: const Icon(Icons.person_outline_rounded),
-                      ),
-                      const SizedBox(height: AppSizes.spaceMD),
-
-                      // ── Email ────────────────────────────────────
-                      CustomTextField(
-                        hint: AppStrings.registerEmailHint,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: _validateEmail,
-                        prefixIcon: const Icon(Icons.email_outlined),
+                        validator: AppValidators.validateName,
+                        prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primary),
                       ),
                       const SizedBox(height: AppSizes.spaceMD),
 
@@ -206,19 +187,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: AppStrings.registerPhoneHint,
                         controller: _phoneController,
                         keyboardType: TextInputType.phone,
-                        validator: _validatePhone,
-                        prefixIcon: const Icon(Icons.phone_outlined),
+                        validator: AppValidators.validatePhone,
+                        prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
+                      ),
+                      const SizedBox(height: AppSizes.spaceMD),
+
+                      // ── Village Selector ──────────────────────────
+                      DropdownButtonFormField<String>(
+                        initialValue: _selectedVillage,
+                        decoration: InputDecoration(
+                          hintText: 'اختر قريتك',
+                          prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.primary),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.primary, width: 2.0),
+                          ),
+                        ),
+                        items: _villages.map((village) {
+                          return DropdownMenuItem(
+                            value: village,
+                            child: Text(village),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() => _selectedVillage = value);
+                        },
                       ),
                       const SizedBox(height: AppSizes.spaceMD),
 
                       // ── Account Type Dropdown ────────────────────
                       DropdownButtonFormField<String>(
-                        value: _selectedRole,
+                        initialValue: _selectedRole,
                         decoration: InputDecoration(
                           hintText: AppStrings.registerAccountTypeHint,
-                          prefixIcon: const Icon(Icons.badge_outlined),
+                          prefixIcon: const Icon(Icons.badge_outlined, color: AppColors.primary),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSizes.textFieldRadius),
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                            borderSide: const BorderSide(color: AppColors.primary, width: 2.0),
                           ),
                         ),
                         items: const [
@@ -242,13 +263,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: AppStrings.registerPasswordHint,
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        validator: _validatePassword,
-                        prefixIcon: const Icon(Icons.lock_outline_rounded),
+                        validator: AppValidators.validatePassword,
+                        prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
                                 ? Icons.visibility_off_outlined
                                 : Icons.visibility_outlined,
+                            color: AppColors.primary,
                           ),
                           onPressed: () {
                             setState(() => _obscurePassword = !_obscurePassword);
@@ -262,13 +284,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: AppStrings.registerConfirmPasswordHint,
                         controller: _confirmPasswordController,
                         obscureText: _obscureConfirm,
-                        validator: _validateConfirm,
-                        prefixIcon: const Icon(Icons.lock_outline_rounded),
+                        validator: (value) => AppValidators.validateConfirmPassword(
+                          value,
+                          _passwordController.text,
+                        ),
+                        prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureConfirm
                                 ? Icons.visibility_off_outlined
                                 : Icons.visibility_outlined,
+                            color: AppColors.primary,
                           ),
                           onPressed: () {
                             setState(() => _obscureConfirm = !_obscureConfirm);
@@ -277,15 +303,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: AppSizes.spaceLG),
 
-                      // ── Register Button ───────────────────────────
-                      CustomButton(
-                        label: AppStrings.registerButton,
-                        isLoading: isLoading,
-                        onPressed: isLoading
-                            ? null
-                            : () => _onRegisterPressed(context),
+                      // ── Register Button (Secondary Amber Theme) ──
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56.0,
+                        child: ElevatedButton(
+                          onPressed: isLoading ? null : () => _onRegisterPressed(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondary,
+                            foregroundColor: Colors.white,
+                            elevation: 2.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                          child: isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text(
+                                  AppStrings.registerButton,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
                       ),
-                      const SizedBox(height: AppSizes.spaceMD),
+                      const SizedBox(height: AppSizes.spaceLG),
 
                       // ── Already have account link ─────────────────
                       Row(
@@ -305,6 +348,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: AppSizes.spaceLG),
                     ],
                   ),
                 ),

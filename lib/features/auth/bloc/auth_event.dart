@@ -33,6 +33,7 @@ class AuthRegisterRequested extends AuthEvent {
 
   /// 'customer' or 'pharmacist'
   final String role;
+  final String village;
 
   const AuthRegisterRequested({
     required this.name,
@@ -40,10 +41,11 @@ class AuthRegisterRequested extends AuthEvent {
     required this.phone,
     required this.password,
     required this.role,
+    required this.village,
   });
 
   @override
-  List<Object?> get props => [name, email, phone, password, role];
+  List<Object?> get props => [name, email, phone, password, role, village];
 }
 
 // ── Logout ────────────────────────────────────────────────

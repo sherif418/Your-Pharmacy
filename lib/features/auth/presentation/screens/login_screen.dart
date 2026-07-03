@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_1/core/constants/app_colors.dart';
 import 'package:flutter_application_1/core/constants/app_sizes.dart';
 import 'package:flutter_application_1/core/constants/app_strings.dart';
+import 'package:flutter_application_1/core/validators/app_validators.dart';
 import 'package:flutter_application_1/core/widgets/app_logo.dart';
 import 'package:flutter_application_1/core/widgets/custom_button.dart';
 import 'package:flutter_application_1/core/widgets/custom_text_field.dart';
@@ -25,39 +26,30 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _onLoginPressed(BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      // Map phone number to a synthetic email address format for Firebase Auth
+      final String phone = _phoneController.text.trim();
+      final String email = '$phone@sidleitak.com';
+      
       context.read<AuthBloc>().add(
             AuthLoginRequested(
-              email: _emailController.text.trim(),
+              email: email,
               password: _passwordController.text,
             ),
           );
     }
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return AppStrings.errorEmptyField;
-    final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-    if (!emailRegex.hasMatch(value.trim())) return AppStrings.errorInvalidEmail;
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return AppStrings.errorEmptyField;
-    if (value.length < 6) return AppStrings.errorWeakPassword;
-    return null;
   }
 
   @override
@@ -90,71 +82,103 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context, state) {
           final isLoading = state is AuthLoading;
           return Scaffold(
+            backgroundColor: AppColors.background,
             body: SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.paddingHorizontal,
-                  vertical: AppSizes.paddingVertical,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: AppSizes.spaceXXL),
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.paddingHorizontal * 1.5,
+                    vertical: AppSizes.paddingVertical,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: AppSizes.spaceLG),
 
-                      // ── Logo ────────────────────────────────────
-                      const AppLogo(size: AppSizes.logoSizeMD),
-                      const SizedBox(height: AppSizes.spaceXL),
+                        // ── Logo ────────────────────────────────────
+                        const AppLogo(size: AppSizes.logoSizeMD),
+                        const SizedBox(height: AppSizes.spaceXL),
 
-                      // ── Email ────────────────────────────────────
-                      CustomTextField(
-                        hint: AppStrings.loginEmailHint,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: _validateEmail,
-                        prefixIcon: const Icon(Icons.email_outlined),
-                      ),
-                      const SizedBox(height: AppSizes.spaceMD),
-
-                      // ── Password ─────────────────────────────────
-                      CustomTextField(
-                        hint: AppStrings.loginPasswordHint,
-                        controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        validator: _validatePassword,
-                        prefixIcon: const Icon(Icons.lock_outline_rounded),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                          ),
-                          onPressed: () {
-                            setState(() => _obscurePassword = !_obscurePassword);
-                          },
+                        // ── Phone Input ──────────────────────────────
+                        CustomTextField(
+                          hint: AppStrings.registerPhoneHint,
+                          controller: _phoneController,
+                          keyboardType: TextInputType.phone,
+                          validator: AppValidators.validatePhone,
+                          prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
                         ),
-                      ),
-                      const SizedBox(height: AppSizes.spaceLG),
+                        const SizedBox(height: AppSizes.spaceMD),
 
-                      // ── Login Button ─────────────────────────────
-                      CustomButton(
-                        label: AppStrings.loginButton,
-                        isLoading: isLoading,
-                        onPressed: isLoading
-                            ? null
-                            : () => _onLoginPressed(context),
-                      ),
-                      const SizedBox(height: AppSizes.spaceMD),
+                        // ── Password Input ───────────────────────────
+                        CustomTextField(
+                          hint: AppStrings.loginPasswordHint,
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          validator: AppValidators.validatePassword,
+                          prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              color: AppColors.primary,
+                            ),
+                            onPressed: () {
+                              setState(() => _obscurePassword = !_obscurePassword);
+                            },
+                          ),
+                        ),
+                        
+                        // ── Forgot Password ──────────────────────────
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              // Optional Forgot Password Action
+                            },
+                            child: const Text(
+                              AppStrings.loginForgotPassword,
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.spaceLG),
 
-                      // ── Register Link ────────────────────────────
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(AppStrings.loginNoAccount),
-                          const SizedBox(width: AppSizes.spaceXXS),
-                          GestureDetector(
-                            onTap: () {
+                        // ── Login Button ─────────────────────────────
+                        CustomButton(
+                          label: AppStrings.loginButton,
+                          isLoading: isLoading,
+                          onPressed: isLoading
+                              ? null
+                              : () => _onLoginPressed(context),
+                        ),
+                        const SizedBox(height: AppSizes.spaceXL),
+
+                        // ── Divider ──────────────────────────────────
+                        Row(
+                          children: const [
+                            Expanded(child: Divider(color: AppColors.border, thickness: 1)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text('أو', style: TextStyle(color: AppColors.textHint)),
+                            ),
+                            Expanded(child: Divider(color: AppColors.border, thickness: 1)),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.spaceXL),
+
+                        // ── Register Link (Accent Theme) ─────────────
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56.0,
+                          child: OutlinedButton(
+                            onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -162,17 +186,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: AppColors.secondary, width: 2.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                            ),
                             child: const Text(
-                              AppStrings.loginRegisterLink,
+                              AppStrings.registerTitle,
                               style: TextStyle(
-                                color: AppColors.primary,
+                                color: AppColors.secondary,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: AppSizes.spaceLG),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -7,9 +7,8 @@ class AppUser {
   final String email;
   final String name;
   final String phone;
-
-  /// 'customer' or 'pharmacist'
   final String role;
+  final String village;
 
   const AppUser({
     required this.uid,
@@ -17,6 +16,7 @@ class AppUser {
     required this.name,
     required this.phone,
     required this.role,
+    required this.village,
   });
 
   factory AppUser.fromMap(Map<String, dynamic> data, String uid) {
@@ -26,6 +26,7 @@ class AppUser {
       name: data['name'] ?? '',
       phone: data['phone'] ?? '',
       role: data['role'] ?? 'customer',
+      village: data['village'] ?? '',
     );
   }
 
@@ -34,5 +35,6 @@ class AppUser {
         'name': name,
         'phone': phone,
         'role': role,
+        'village': village,
       };
 }

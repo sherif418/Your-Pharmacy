@@ -36,6 +36,59 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<AuthBloc>().add(const AuthLogoutRequested());
   }
 
+  // ── Messages section ───────────────────────────────────────
+  Widget _buildMessagesSection(List<String> messages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          AppStrings.homeMessagesTitle,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: AppSizes.spaceMD),
+        ...messages.map((message) => Container(
+              margin: const EdgeInsets.only(bottom: AppSizes.spaceSM),
+              padding: const EdgeInsets.all(AppSizes.paddingCard),
+              decoration: BoxDecoration(
+                color: AppColors.cardBackground,
+                borderRadius: BorderRadius.circular(AppSizes.cardRadius),
+                border: Border.all(color: AppColors.border, width: 1),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.notifications_active_outlined,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: AppSizes.spaceMD),
+                  Expanded(
+                    child: Text(
+                      message,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+      ],
+    );
+  }
+
   // ── Customer body widgets ──────────────────────────────────
   Widget _buildCustomerHome() {
     return SingleChildScrollView(
@@ -45,6 +98,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // ── Greeting card ──────────────────────────────────
           _GreetingCard(user: widget.user),
+          const SizedBox(height: AppSizes.spaceLG),
+
+          // ── Messages section ───────────────────────────────
+          _buildMessagesSection([
+            AppStrings.clientMessage1,
+            AppStrings.clientMessage2,
+          ]),
           const SizedBox(height: AppSizes.spaceLG),
 
           // ── Feature cards grid ─────────────────────────────
@@ -96,6 +156,14 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _GreetingCard(user: widget.user),
           const SizedBox(height: AppSizes.spaceLG),
+
+          // ── Messages section ───────────────────────────────
+          _buildMessagesSection([
+            AppStrings.pharmacistMessage1,
+            AppStrings.pharmacistMessage2,
+          ]),
+          const SizedBox(height: AppSizes.spaceLG),
+
           Text(
             'لوحة التحكم',
             style: TextStyle(

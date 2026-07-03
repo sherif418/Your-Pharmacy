@@ -82,11 +82,23 @@ class AppStrings {
   static const String errorSelectAccountType = 'من فضلك اختر نوع الحساب';
   static const String errorLoginFailed = 'فشل تسجيل الدخول، تحقق من البيانات';
   static const String successOrderPlaced = 'تم إرسال طلبك بنجاح';
+  static const String errorNetworkRequestFailed = 'فشل الاتصال بالشبكة، يرجى التحقق من الاتصال بالإنترنت';
+  static const String errorEmailAlreadyInUse = 'هذا البريد الإلكتروني مسجل بالفعل لمستخدم آخر';
+  static const String errorUserNotFound = 'لم يتم العثور على حساب مسجل بهذه البيانات';
+  static const String errorWrongPassword = 'كلمة المرور غير صحيحة';
+  static const String errorAccountNotFound = 'الحساب غير موجود في قاعدة البيانات، يرجى إنشاء حساب أولاً';
+  static const String errorTooManyRequests = 'لقد تم إرسال الكثير من الطلبات، يرجى المحاولة لاحقاً بعد قليل';
+  static const String errorTooManyRequestsBlock = 'تم حظر هذا الجهاز مؤقتاً بسبب كثرة محاولات الدخول الخاطئة';
 
   // ── Home ─────────────────────────────────────────────────
   static const String logout = 'تسجيل الخروج';
   static const String homeGreeting = 'أهلاً،';
   static const String homeRoleCustomer = 'عميل';
   static const String homeRolePharmacist = 'صيدلي';
+  static const String homeMessagesTitle = 'الرسائل والتنبيهات';
+  static const String clientMessage1 = 'لديك طلب جاهز للتوصيل أو الاستلام.';
+  static const String clientMessage2 = 'تذكير: موعد تناول جرعة الدواء المزمن يقترب.';
+  static const String pharmacistMessage1 = 'تنبيه: هناك طلبات جديدة تحتاج إلى مراجعة وتحضير.';
+  static const String pharmacistMessage2 = 'تحديث المخزون: يرجى التحقق من نواقص الأدوية الأكثر طلباً.';
 }
 
