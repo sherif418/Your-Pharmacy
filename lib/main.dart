@@ -1,45 +1,37 @@
-// main.dart
-// Responsible for: starting the Flutter application, initializing services/dependencies,
-// and setting up the MaterialApp with global styling and the root screen.
+// lib/main.dart
 
-import 'package:device_preview/device_preview.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/theme/app_theme.dart';
-import 'package:flutter_application_1/features/auth/presentation/screens/splash_screen.dart';
-import 'package:flutter_application_1/firebase_options.dart';
-import 'package:flutter_application_1/service_locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'theme/app_theme.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/state/medicine_cubit.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // Initialize all dependencies in Service Locator (GetIt)
-  await configureDependencies();
-
-  runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => const MyApp(),
-    ),
-  );
+void main() {
+  runApp(const YourPharmacyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class YourPharmacyApp extends StatelessWidget {
+  const YourPharmacyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+    final _router = GoRouter(
+      routes: [
+        GoRoute(path: '/', builder: (context, state) => const HomePage()),
+        // Add more routes here as needed
+      ],
+    );
+
+    return BlocProvider(
+      create: (_) => MedicineCubit()..loadMedicines(),
+      child: MaterialApp.router(
+        title: 'Your Pharmacy',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        routerConfig: _router,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
