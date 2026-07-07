@@ -1,14 +1,18 @@
-// app_theme.dart
-// Responsible for: defining the global MaterialApp theme (colors, fonts, button styles, etc.)
-// All theme values are sourced from AppColors and AppSizes — no hardcoded values here.
+// lib/core/theme/app_theme.dart
+
+// This file defines the global theme used throughout the app.
+// A single ThemeData instance is created once (as a private static field) and
+// exposed through two getters:
+//   * `lightTheme` – the primary name used by the rest of the code.
+//   * `theme`      – a legacy alias kept for any old generated code.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/constants/app_colors.dart';
 import 'package:flutter_application_1/core/constants/app_sizes.dart';
 
 class AppTheme {
-  // ── Light Theme ───────────────────────────────────────────
-  static ThemeData get lightTheme => ThemeData(
+  // ── Private cached theme ────────────────────────────────────────
+  static final ThemeData _lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Cairo',
     colorScheme: const ColorScheme.light(
@@ -93,7 +97,10 @@ class AppTheme {
     ),
   );
 
-  // ── Legacy alias (keep old code working) ─────────────────
-  // ignore: non_constant_identifier_names
-  static ThemeData get ligththeme => lightTheme;
+  // ── Public getters ────────────────────────────────────────
+  /// Primary theme used throughout the app.
+  static ThemeData get lightTheme => _lightTheme;
+
+  /// Legacy alias kept for backward‑compatibility with older generated code.
+  static ThemeData get theme => _lightTheme;
 }

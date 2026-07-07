@@ -25,6 +25,10 @@ class AppColors {
   static const Color textSecondary = Color(0xFF2E8B57);
   static const Color textHint = Color(0xFF9CA3AF);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
+  // Added muted text color for subtle hints
+  static const Color textMuted = Color(0xFF6B7280);
+  // Alias accent to secondary for backward compatibility
+  static const Color accent = secondary;
 
   // ── Status Colors ─────────────────────────────────────────
   static const Color success = Color(0xFF22C55E);

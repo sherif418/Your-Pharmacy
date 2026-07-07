@@ -9,7 +9,7 @@ import 'package:flutter_application_1/core/constants/app_sizes.dart';
 import 'package:flutter_application_1/core/widgets/app_logo.dart';
 import 'package:flutter_application_1/features/auth/bloc/auth_bloc.dart';
 import 'package:flutter_application_1/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_application_1/features/home/presentation/screens/home_screen.dart';
+import 'package:flutter_application_1/features/client(screens)/presentation/screens/home_screen.dart';
 import 'package:flutter_application_1/service_locator.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +19,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late final AuthBloc _authBloc;
   late final AnimationController _animationController;
   late final Animation<double> _fadeAnimation;
@@ -69,9 +70,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           if (state is AuthAuthenticated) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                builder: (_) => HomeScreen(user: state.user),
-              ),
+              MaterialPageRoute(builder: (_) => HomeScreen(user: state.user)),
             );
           } else if (state is AuthUnauthenticated || state is AuthError) {
             Navigator.pushReplacement(
@@ -121,7 +120,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
                           strokeWidth: 3.0,
                         ),
                         const SizedBox(height: AppSizes.spaceLG),
@@ -129,11 +130,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.home_work_rounded, color: AppColors.primary, size: 24),
+                            Icon(
+                              Icons.home_work_rounded,
+                              color: AppColors.primary,
+                              size: 24,
+                            ),
                             SizedBox(width: 8),
-                            Icon(Icons.directions_bike_rounded, color: AppColors.secondary, size: 24),
+                            Icon(
+                              Icons.directions_bike_rounded,
+                              color: AppColors.secondary,
+                              size: 24,
+                            ),
                             SizedBox(width: 8),
-                            Icon(Icons.local_hospital_rounded, color: AppColors.primary, size: 24),
+                            Icon(
+                              Icons.local_hospital_rounded,
+                              color: AppColors.primary,
+                              size: 24,
+                            ),
                           ],
                         ),
                       ],

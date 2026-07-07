@@ -11,8 +11,8 @@ import 'package:flutter_application_1/core/constants/app_strings.dart';
 import 'package:flutter_application_1/features/auth/bloc/auth_bloc.dart';
 import 'package:flutter_application_1/features/auth/domain/user.dart';
 import 'package:flutter_application_1/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_application_1/features/home/presentation/widgets/bottom_nav_bar.dart';
-import 'package:flutter_application_1/features/home/presentation/widgets/feature_card.dart';
+import '/features/client(screens)/presentation/widgets/bottom_nav_bar.dart';
+import '/features/client(screens)/presentation/widgets/feature_card.dart';
 import 'package:flutter_application_1/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
