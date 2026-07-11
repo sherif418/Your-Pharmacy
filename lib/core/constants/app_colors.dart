@@ -35,6 +35,10 @@ class AppColors {
   static const Color warning = Color(0xFFF97316);
   static const Color error = Color(0xFFEF4444);
   static const Color info = Color(0xFF3B82F6);
+  static const Color primarySoft = Color(0x1A2E8B57);
+  static const Color primaryLightSoft = Color(0x1A3CB371);
+  static const Color whiteFaded = Color(0x26FFFFFF);
+  static const Color surfaceSoft = Color(0xFFF1F5F9);
 
   // ── Order Status Badge Colors ─────────────────────────────
   static const Color statusPending = Color(0xFFF59E0B);

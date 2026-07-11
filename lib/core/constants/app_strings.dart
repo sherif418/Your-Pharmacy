@@ -35,12 +35,46 @@ class AppStrings {
   static const String registerSuccessTitle = 'تم التسجيل بنجاح!';
   static const String registerSuccessBody = 'يمكنك الآن تسجيل الدخول بحسابك الجديد.';
 
+  // ── Auth – Email Verification ─────────────────────────────
+  static const String emailVerificationTitle = 'تحقق من بريدك الإلكتروني';
+  static const String emailVerificationBody = 'تم إرسال رابط التحقق إلى بريدك الإلكتروني. افتح بريدك واضغط على الرابط ثم عد هنا.';
+  static const String emailVerificationButton = 'تحققت ✓';
+  static const String emailVerificationResend = 'إعادة إرسال البريد';
+  static const String emailVerificationNotVerified = 'لم يتم التحقق بعد، تحقق من بريدك أولاً';
+  static const String emailVerificationResendSuccess = 'تم إعادة إرسال بريد التحقق بنجاح';
+  static const String emailVerificationOpenApp = 'افتح تطبيق البريد';
+  static const String errorEmailNotVerified = 'يرجى تأكيد بريدك الإلكتروني أولاً';
+
   // ── Home ─────────────────────────────────────────────────
   static const String homeWelcome = 'مرحباً،';
   static const String homeOrderMedicine = 'طلب دواء';
   static const String homeUploadPrescription = 'رفع روشتة';
   static const String homeMyOrders = 'طلباتي';
   static const String homeChronicMeds = 'أدويتي المزمنة';
+  static const String homeQuickServices = 'خدمات سريعة';
+  static const String homeServices = 'الخدمات';
+  static const String homeProductCategories = 'تصنيفات المنتجات';
+  static const String homeBestSellers = 'الأكثر طلباً';
+  static const String homeViewAll = 'عرض الكل';
+  static const String homePrescriptionPrompt = 'لديك روشتة؟';
+  static const String homePrescriptionDescription = 'ارفع صورة الروشتة وسنقوم بتحضير طلبك';
+  static const String homeUploadNow = 'رفع الآن';
+  static const String homeHealthAssistantTitle = 'مساعدك الصحي';
+  static const String homeHealthAssistantPrompt = 'هل تناولت جرعة الصباح؟';
+  static const String homeTalkToAssistant = 'تحدث مع المساعد';
+  static const String homeWaterTrackerTitle = 'شرب الماء';
+  static const String homeWaterCupCount = 'أكواب';
+  static const String homeLogWaterCup = 'سجل كوب ماء';
+  static const String homeTipOfTheDayTitle = 'نصيحة اليوم';
+  static const String homeShowMore = 'عرض المزيد';
+  static const String homeReminderEnabled = 'تذكير مفعل';
+  static const String homeManageReminders = 'إدارة التذكيرات';
+  static const String homeChronicDiseaseTitle = 'متابعة الأمراض المزمنة';
+  static const String homeHealthSummaryTitle = 'ملخص حالتك الصحية';
+  static const String homeTodayScheduleTitle = 'جدول أدوية اليوم';
+  static const String homeComingSoon = 'قريباً...';
+  static const String profile = 'الملف الشخصي';
+  static const String settings = 'الإعدادات';
 
   // ── Orders ───────────────────────────────────────────────
   static const String ordersTitle = 'طلباتي';

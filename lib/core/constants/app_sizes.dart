@@ -13,6 +13,8 @@ class AppSizes {
   static const double spaceXL = 32.0;
   static const double spaceXXL = 48.0;
   static const double spaceHuge = 64.0;
+  static const double spaceXXXS = 2.0;
+  static const double spaceXS2 = 6.0;
 
   // ── Padding ───────────────────────────────────────────────
   /// Standard horizontal screen padding.
@@ -36,10 +38,23 @@ class AppSizes {
   static const double iconMD = 24.0;
   static const double iconLG = 32.0;
   static const double iconXL = 48.0;
+  static const double iconXXL = 56.0;
 
   // ── Button ────────────────────────────────────────────────
   static const double buttonHeight = 52.0;
   static const double buttonRadius = 12.0;
+  static const double smallButtonRadius = 10.0;
+  static const double smallButtonPaddingVertical = 8.0;
+  static const double smallButtonPaddingHorizontal = 14.0;
+  static const double badgeDiameter = 16.0;
+  static const double circleIconButtonSize = 40.0;
+  static const double progressCircleSize = 64.0;
+  static const double quickServiceButtonWidth = 74.0;
+  static const double quickServiceIconSize = 54.0;
+  static const double categoryChipSize = 50.0;
+  static const double productCardWidth = 130.0;
+  static const double productImageHeight = 70.0;
+  static const double productCardPadding = 10.0;
 
   // ── Text Field ────────────────────────────────────────────
   static const double textFieldHeight = 56.0;
