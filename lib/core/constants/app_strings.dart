@@ -9,15 +9,33 @@ class AppStrings {
 
   // ── Splash ───────────────────────────────────────────────
   static const String splashLoading = 'جاري التحميل...';
+  static const String splashVerifying = 'جاري التحقق...';
+  static const String splashLoadingData = 'جاري تحميل البيانات...';
+  static const String splashWelcome = 'أهلاً بك...';
 
   // ── Auth – Login ─────────────────────────────────────────
   static const String loginTitle = 'تسجيل الدخول';
+  static const String loginWelcomeBack = 'أهلاً بعودتك';
+  static const String loginSubtitle = 'سجّل الدخول لمتابعة استخدام التطبيق';
+  static const String loginClientTitle = 'تسجيل دخول العميل';
+  static const String loginPharmacistTitle = 'تسجيل دخول الصيدلي';
   static const String loginEmailHint = 'البريد الإلكتروني';
   static const String loginPasswordHint = 'كلمة المرور';
-  static const String loginButton = 'دخول';
-  static const String loginNoAccount = 'ليس لديك حساب؟';
+  static const String loginButton = 'تسجيل الدخول';
+  static const String loginNoAccount = 'ليس لديك حساب؟ ';
   static const String loginRegisterLink = 'سجّل الآن';
   static const String loginForgotPassword = 'نسيت كلمة المرور؟';
+  static const String loginOr = 'أو';
+  static const String loginCreateAccount = 'إنشاء حساب جديد';
+  static const String loginEnterCredentials = 'أدخل البريد والكلمة';
+  static const String loginResendVerification = 'إعادة إرسال';
+  static const String loginResendSuccess = 'تم إعادة إرسال بريد التحقق بنجاح';
+
+  // ── Auth – Pharmacist Notice ──────────────────────────────
+  /// Notice shown on the pharmacist login form confirming admin-only account creation
+  /// for the single pharmacy — no self-registration possible.
+  static const String pharmacistLoginNotice =
+      'لا يوجد تسجيل حساب جديد للصيدلي، يتم إنشاء البريد الإلكتروني بواسطة مدير النظام.';
 
   // ── Auth – Register ──────────────────────────────────────
   static const String registerTitle = 'إنشاء حساب جديد';
@@ -33,17 +51,41 @@ class AppStrings {
   static const String registerHaveAccount = 'لديك حساب بالفعل؟';
   static const String registerLoginLink = 'تسجيل الدخول';
   static const String registerSuccessTitle = 'تم التسجيل بنجاح!';
-  static const String registerSuccessBody = 'يمكنك الآن تسجيل الدخول بحسابك الجديد.';
+  static const String registerSuccessBody =
+      'يمكنك الآن تسجيل الدخول بحسابك الجديد.';
+  static const String registerVillageHint = 'اختر قريتك';
+  static const String registerVillageLabel = 'القرية';
+  static const String registerPersonalInfoTitle = 'البيانات الشخصية';
+  static const String registerAccountInfoTitle = 'بيانات الحساب';
+  static const String registerNameLabel = 'الاسم بالكامل';
+  static const String registerPhoneLabel = 'رقم الهاتف';
+  static const String registerEmailLabel = 'البريد الإلكتروني';
+  static const String registerPasswordLabel = 'كلمة المرور';
+  static const String registerConfirmPasswordLabel = 'تأكيد كلمة المرور';
+  static const String registerPasswordHint8Chars = '8 أحرف على الأقل';
+  static const String registerSelectVillage = 'من فضلك اختر قريتك';
+  static const String registerWelcome = 'أهلاً بك! سجّل بياناتك للبدء';
 
   // ── Auth – Email Verification ─────────────────────────────
   static const String emailVerificationTitle = 'تحقق من بريدك الإلكتروني';
-  static const String emailVerificationBody = 'تم إرسال رابط التحقق إلى بريدك الإلكتروني. افتح بريدك واضغط على الرابط ثم عد هنا.';
+  static const String emailVerificationBody =
+      'تم إرسال رابط التحقق إلى بريدك الإلكتروني. افتح بريدك واضغط على الرابط ثم عد هنا.';
   static const String emailVerificationButton = 'تحققت ✓';
   static const String emailVerificationResend = 'إعادة إرسال البريد';
-  static const String emailVerificationNotVerified = 'لم يتم التحقق بعد، تحقق من بريدك أولاً';
-  static const String emailVerificationResendSuccess = 'تم إعادة إرسال بريد التحقق بنجاح';
+  static const String emailVerificationNotVerified =
+      'لم يتم التحقق بعد، تحقق من بريدك أولاً';
+  static const String emailVerificationResendSuccess =
+      'تم إعادة إرسال بريد التحقق بنجاح';
   static const String emailVerificationOpenApp = 'افتح تطبيق البريد';
-  static const String errorEmailNotVerified = 'يرجى تأكيد بريدك الإلكتروني أولاً';
+  static const String errorEmailNotVerified =
+      'يرجى تأكيد بريدك الإلكتروني أولاً';
+  static const String emailVerificationChecking = 'جاري التحقق...';
+  static const String emailVerificationStep1 = 'افتح تطبيق البريد الإلكتروني';
+  static const String emailVerificationStep2 = 'ابحث عن بريد من "صيدليتك"';
+  static const String emailVerificationStep3 = 'اضغط على رابط التحقق في البريد';
+  static const String emailVerificationStep4 = 'عد هنا واضغط "تحققت ✓"';
+  static const String emailVerificationOpenMailFailed =
+      'تعذر فتح تطبيق البريد الإلكتروني. حاول لاحقاً.';
 
   // ── Home ─────────────────────────────────────────────────
   static const String homeWelcome = 'مرحباً،';
@@ -57,7 +99,8 @@ class AppStrings {
   static const String homeBestSellers = 'الأكثر طلباً';
   static const String homeViewAll = 'عرض الكل';
   static const String homePrescriptionPrompt = 'لديك روشتة؟';
-  static const String homePrescriptionDescription = 'ارفع صورة الروشتة وسنقوم بتحضير طلبك';
+  static const String homePrescriptionDescription =
+      'ارفع صورة الروشتة وسنقوم بتحضير طلبك';
   static const String homeUploadNow = 'رفع الآن';
   static const String homeHealthAssistantTitle = 'مساعدك الصحي';
   static const String homeHealthAssistantPrompt = 'هل تناولت جرعة الصباح؟';
@@ -75,6 +118,10 @@ class AppStrings {
   static const String homeComingSoon = 'قريباً...';
   static const String profile = 'الملف الشخصي';
   static const String settings = 'الإعدادات';
+
+  /// Quick-service button label that shows the single pharmacy's location/address.
+  /// Replaces the old "أقرب صيدلية" label which incorrectly implied multiple branches.
+  static const String homePharmacyLocation = 'موقع الصيدلية';
 
   // ── Orders ───────────────────────────────────────────────
   static const String ordersTitle = 'طلباتي';
@@ -105,24 +152,36 @@ class AppStrings {
   static const String pharmacistTotalOrders = 'إجمالي الطلبات';
   static const String pharmacistPendingOrders = 'طلبات قيد الانتظار';
 
+  // ── Notifications ─────────────────────────────────────────
+  static const String notificationsTitle = 'الإشعارات';
+  static const String notificationsSubtitle = 'سنخبرك بكل ما يهم صحتك';
+
   // ── General Errors & Feedback ────────────────────────────
   static const String errorGeneral = 'حدث خطأ، حاول مرة أخرى';
   static const String errorInvalidEmail = 'البريد الإلكتروني غير صحيح';
-  static const String errorWeakPassword = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+  static const String errorWeakPassword =
+      'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
   static const String errorPasswordMismatch = 'كلمتا المرور غير متطابقتين';
   static const String errorEmptyField = 'هذا الحقل مطلوب';
   static const String errorShortName = 'الاسم يجب أن يكون 3 أحرف على الأقل';
-  static const String errorInvalidPhone = 'رقم الهاتف يجب أن يكون 11 رقمًا ويبدأ بـ 01';
+  static const String errorInvalidPhone =
+      'رقم الهاتف يجب أن يكون 11 رقمًا ويبدأ بـ 01';
   static const String errorSelectAccountType = 'من فضلك اختر نوع الحساب';
   static const String errorLoginFailed = 'فشل تسجيل الدخول، تحقق من البيانات';
   static const String successOrderPlaced = 'تم إرسال طلبك بنجاح';
-  static const String errorNetworkRequestFailed = 'فشل الاتصال بالشبكة، يرجى التحقق من الاتصال بالإنترنت';
-  static const String errorEmailAlreadyInUse = 'هذا البريد الإلكتروني مسجل بالفعل لمستخدم آخر';
-  static const String errorUserNotFound = 'لم يتم العثور على حساب مسجل بهذه البيانات';
+  static const String errorNetworkRequestFailed =
+      'فشل الاتصال بالشبكة، يرجى التحقق من الاتصال بالإنترنت';
+  static const String errorEmailAlreadyInUse =
+      'هذا البريد الإلكتروني مسجل بالفعل لمستخدم آخر';
+  static const String errorUserNotFound =
+      'لم يتم العثور على حساب مسجل بهذه البيانات';
   static const String errorWrongPassword = 'كلمة المرور غير صحيحة';
-  static const String errorAccountNotFound = 'الحساب غير موجود في قاعدة البيانات، يرجى إنشاء حساب أولاً';
-  static const String errorTooManyRequests = 'لقد تم إرسال الكثير من الطلبات، يرجى المحاولة لاحقاً بعد قليل';
-  static const String errorTooManyRequestsBlock = 'تم حظر هذا الجهاز مؤقتاً بسبب كثرة محاولات الدخول الخاطئة';
+  static const String errorAccountNotFound =
+      'الحساب غير موجود في قاعدة البيانات، يرجى إنشاء حساب أولاً';
+  static const String errorTooManyRequests =
+      'لقد تم إرسال الكثير من الطلبات، يرجى المحاولة لاحقاً بعد قليل';
+  static const String errorTooManyRequestsBlock =
+      'تم حظر هذا الجهاز مؤقتاً بسبب كثرة محاولات الدخول الخاطئة';
 
   // ── Home ─────────────────────────────────────────────────
   static const String logout = 'تسجيل الخروج';
@@ -131,8 +190,10 @@ class AppStrings {
   static const String homeRolePharmacist = 'صيدلي';
   static const String homeMessagesTitle = 'الرسائل والتنبيهات';
   static const String clientMessage1 = 'لديك طلب جاهز للتوصيل أو الاستلام.';
-  static const String clientMessage2 = 'تذكير: موعد تناول جرعة الدواء المزمن يقترب.';
-  static const String pharmacistMessage1 = 'تنبيه: هناك طلبات جديدة تحتاج إلى مراجعة وتحضير.';
-  static const String pharmacistMessage2 = 'تحديث المخزون: يرجى التحقق من نواقص الأدوية الأكثر طلباً.';
+  static const String clientMessage2 =
+      'تذكير: موعد تناول جرعة الدواء المزمن يقترب.';
+  static const String pharmacistMessage1 =
+      'تنبيه: هناك طلبات جديدة تحتاج إلى مراجعة وتحضير.';
+  static const String pharmacistMessage2 =
+      'تحديث المخزون: يرجى التحقق من نواقص الأدوية الأكثر طلباً.';
 }
-

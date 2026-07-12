@@ -100,7 +100,7 @@ class HomeMockData {
   static const List<QuickServiceData> customerQuickServices = [
     QuickServiceData(icon: Icons.medication_rounded, label: 'اطلب دواء'),
     QuickServiceData(icon: Icons.upload_file_rounded, label: 'رفع روشتة'),
-    QuickServiceData(icon: Icons.location_on_rounded, label: 'أقرب صيدلية'),
+    QuickServiceData(icon: Icons.location_on_rounded, label: AppStrings.homePharmacyLocation),
     QuickServiceData(icon: Icons.medical_information_rounded, label: 'أدويتي'),
   ];
 

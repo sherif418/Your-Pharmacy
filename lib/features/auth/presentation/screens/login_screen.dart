@@ -1,13 +1,19 @@
 // lib/features/auth/presentation/screens/login_screen.dart
+//
+// UI مُحسّن ليطابق ستايل شاشة التسجيل (ظلال + تدرج + كروت)
 
 import 'package:flutter/material.dart';
-import '/core/theme/app_colors.dart';
-import '/widgets/app_card.dart';
-import '/widgets/app_text_field.dart';
-import '/widgets/app_primary_button.dart';
-import '/widgets/app_notice.dart';
-import '/features/auth/presentation/widgets/app_logo.dart';
-import '/core/routes/app_routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_1/core/constants/app_colors.dart';
+import 'package:flutter_application_1/core/constants/app_strings.dart';
+import 'package:flutter_application_1/core/widgets/app_logo.dart';
+import 'package:flutter_application_1/features/auth/bloc/auth_bloc.dart';
+import 'package:flutter_application_1/features/auth/presentation/widgets/role_toggle.dart';
+import 'package:flutter_application_1/features/auth/presentation/widgets/client_login_form.dart';
+import 'package:flutter_application_1/features/auth/presentation/widgets/pharmacist_login_form.dart';
+import 'package:flutter_application_1/features/client(screens)/presentation/screens/home_screen.dart';
+import 'package:flutter_application_1/service_locator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,272 +30,210 @@ class _LoginScreenState extends State<LoginScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            child: AppCard(
-              child: Column(
-                children: [
-                  const AppLogo(),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'تسجيل الدخول',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.primary.withValues(alpha: 0.08),
+                AppColors.surface.withValues(alpha: 0.0),
+              ],
+              stops: const [0.0, 0.4],
+            ),
+          ),
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth > 600 ? 0 : 20,
+                    vertical: 24,
+                  ),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 460),
+                      child: BlocProvider(
+                        create: (_) => getIt<AuthBloc>(),
+                        child: BlocListener<AuthBloc, AuthState>(
+                          listener: (context, state) {
+                            if (state is AuthAuthenticated) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      HomeScreen(user: state.user),
+                                ),
+                              );
+                            } else if (state is AuthLoginEmailNotVerified) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    AppStrings.errorEmailNotVerified,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.orange.shade700,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  margin: const EdgeInsets.all(16),
+                                  duration: const Duration(seconds: 6),
+                                  action: SnackBarAction(
+                                    label: AppStrings.loginResendVerification,
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      context.read<AuthBloc>().add(
+                                            const AuthResendVerificationEmail(),
+                                          );
+                                    },
+                                  ),
+                                ),
+                              );
+                            } else if (state is AuthResendVerificationSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Row(
+                                    children: [
+                                      Icon(Icons.check_circle_outline,
+                                          color: Colors.white, size: 20),
+                                      SizedBox(width: 10),
+                                      Text(AppStrings.loginResendSuccess),
+                                    ],
+                                  ),
+                                  backgroundColor: AppColors.primary,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  margin: const EdgeInsets.all(16),
+                                ),
+                              );
+                            } else if (state is AuthError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Row(
+                                    children: [
+                                      const Icon(Icons.error_outline,
+                                          color: Colors.white, size: 20),
+                                      const SizedBox(width: 10),
+                                      Expanded(child: Text(state.message)),
+                                    ],
+                                  ),
+                                  backgroundColor: AppColors.error,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  margin: const EdgeInsets.all(16),
+                                ),
+                              );
+                            }
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 22, vertical: 16),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  borderRadius: BorderRadius.circular(24),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          AppColors.primary.withValues(alpha: 0.22),
+                                      blurRadius: 26,
+                                      spreadRadius: 1,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                  ],
+                                ),
+                                child: const AppLogo(),
+                              ),
+                              SizedBox(height: 18.h),
+                              const Text(
+                                AppStrings.loginWelcomeBack,
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.textPrimary,
+                                  letterSpacing: 0.2,
+                                ),
+                              ),
+                              SizedBox(height: 4.h),
+                              const Text(
+                                AppStrings.loginSubtitle,
+                                style: TextStyle(
+                                  fontSize: 12.5,
+                                  color: AppColors.textMuted,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 26.h),
+
+                              RoleToggle(
+                                isClient: _isClient,
+                                onChanged: (v) =>
+                                    setState(() => _isClient = v),
+                              ),
+                              SizedBox(height: 22.h),
+
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  borderRadius: BorderRadius.circular(22),
+                                  border: Border.all(
+                                    color: AppColors.border.withValues(alpha: 0.6),
+                                    width: 1,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          AppColors.primary.withValues(alpha: 0.10),
+                                      blurRadius: 22,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                    const BoxShadow(
+                                      color: AppColors.shadow,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 250),
+                                  transitionBuilder: (child, anim) =>
+                                      FadeTransition(
+                                    opacity: anim,
+                                    child: SizeTransition(
+                                      sizeFactor: anim,
+                                      axisAlignment: -1,
+                                      child: child,
+                                    ),
+                                  ),
+                                  child: _isClient
+                                      ? const ClientLoginForm(
+                                          key: ValueKey('client'))
+                                      : const PharmacistLoginForm(
+                                          key: ValueKey('pharmacist'),
+                                        ),
+                                ),
+                              ),
+                              SizedBox(height: 24.h),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 18),
-                  _RoleToggle(
-                    isClient: _isClient,
-                    onChanged: (v) => setState(() => _isClient = v),
-                  ),
-                  const SizedBox(height: 22),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    child: _isClient
-                        ? const _ClientLoginForm(key: ValueKey('client'))
-                        : const _PharmacistLoginForm(
-                            key: ValueKey('pharmacist'),
-                          ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-/// مبدل عميل / صيدلي
-class _RoleToggle extends StatelessWidget {
-  final bool isClient;
-  final ValueChanged<bool> onChanged;
-  const _RoleToggle({required this.isClient, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        children: [
-          Expanded(
-            child: _RoleButton(
-              label: 'عميل',
-              icon: Icons.person_rounded,
-              selected: isClient,
-              onTap: () => onChanged(true),
-            ),
-          ),
-          Expanded(
-            child: _RoleButton(
-              label: 'صيدلي',
-              icon: Icons.medical_services_outlined,
-              selected: !isClient,
-              onTap: () => onChanged(false),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RoleButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-  const _RoleButton({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: selected ? Colors.white : AppColors.text,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(width: 6),
-            Icon(
-              icon,
-              size: 18,
-              color: selected ? Colors.white : AppColors.textMuted,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// نموذج دخول العميل
-class _ClientLoginForm extends StatelessWidget {
-  const _ClientLoginForm({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const _SectionTitle(
-          title: 'تسجيل دخول العميل',
-          icon: Icons.person_outline,
-        ),
-        const SizedBox(height: 14),
-        const AppTextField(
-          hint: 'البريد الإلكتروني',
-          icon: Icons.mail_outline_rounded,
-        ),
-        const SizedBox(height: 12),
-        const AppTextField(
-          hint: 'كلمة المرور',
-          icon: Icons.lock_outline_rounded,
-          isPassword: true,
-        ),
-        const SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {},
-            child: const Text(
-              'نسيت كلمة المرور؟',
-              style: TextStyle(color: AppColors.accent, fontSize: 12.5),
-            ),
-          ),
-        ),
-        const SizedBox(height: 6),
-        AppPrimaryButton(
-          label: 'تسجيل الدخول',
-          icon: Icons.login_rounded,
-          onPressed: () {},
-        ),
-        const SizedBox(height: 14),
-        Row(
-          children: const [
-            Expanded(child: Divider(color: AppColors.border)),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                'أو',
-                style: TextStyle(color: AppColors.textMuted, fontSize: 12),
-              ),
-            ),
-            Expanded(child: Divider(color: AppColors.border)),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            const Text(
-              'ليس لديك حساب؟ ',
-              style: TextStyle(fontSize: 12.5, color: AppColors.text),
-            ),
-            GestureDetector(
-              // inside onTap for create account
-              onTap: () => Navigator.of(context).pushNamed(AppRoutes.register),
-              child: const Text(
-                'إنشاء حساب جديد',
-                style: TextStyle(
-                  fontSize: 12.5,
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// نموذج دخول الصيدلي
-class _PharmacistLoginForm extends StatelessWidget {
-  const _PharmacistLoginForm({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const _SectionTitle(
-          title: 'تسجيل دخول الصيدلي',
-          icon: Icons.medical_services_outlined,
-        ),
-        const SizedBox(height: 14),
-        const AppTextField(
-          hint: 'البريد الإلكتروني',
-          icon: Icons.mail_outline_rounded,
-        ),
-        const SizedBox(height: 12),
-        const AppTextField(
-          hint: 'كلمة المرور',
-          icon: Icons.lock_outline_rounded,
-          isPassword: true,
-        ),
-        const SizedBox(height: 14),
-        const AppNotice(
-          text:
-              'لا يوجد تسجيل حساب جديد للصيدلي، يتم إنشاء البريد الإلكتروني بواسطة مدير النظام.',
-        ),
-        const SizedBox(height: 14),
-        AppPrimaryButton(
-          label: 'تسجيل الدخول',
-          icon: Icons.login_rounded,
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  const _SectionTitle({required this.title, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: AppColors.text,
-          ),
-        ),
-        const SizedBox(width: 6),
-        Icon(icon, size: 16, color: AppColors.primary),
-      ],
     );
   }
 }

@@ -1,6 +1,5 @@
 // auth_event.dart
 // Responsible for: defining all possible events (user actions) that the AuthBloc can receive.
-// Each event represents one thing the user or app can trigger related to authentication.
 
 part of 'auth_bloc.dart';
 
@@ -46,6 +45,24 @@ class AuthRegisterRequested extends AuthEvent {
 
   @override
   List<Object?> get props => [name, email, phone, password, role, village];
+}
+
+// ── Email Verification Check ──────────────────────────────
+/// Fired when the user presses "تحققت" on the verification screen.
+/// Triggers reload() → checks emailVerified → saves to Firestore if verified.
+class AuthEmailVerificationCheck extends AuthEvent {
+  /// The pending user data (not yet in Firestore).
+  final AppUser pendingUser;
+  const AuthEmailVerificationCheck({required this.pendingUser});
+
+  @override
+  List<Object?> get props => [pendingUser];
+}
+
+// ── Resend Verification Email ─────────────────────────────
+/// Fired when the user requests a new verification email.
+class AuthResendVerificationEmail extends AuthEvent {
+  const AuthResendVerificationEmail();
 }
 
 // ── Logout ────────────────────────────────────────────────

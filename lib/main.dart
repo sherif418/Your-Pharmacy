@@ -47,6 +47,7 @@ class SaydaliatekApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           locale: DevicePreview.locale(context), // مطلوب لـ Device Preview
           builder: DevicePreview.appBuilder,      // مطلوب لـ Device Preview
+          // ignore: deprecated_member_use
           useInheritedMediaQuery: true,           // مطلوب لـ Device Preview
           // Start with splash screen; it will navigate based on auth state
           home: const SplashScreen(),

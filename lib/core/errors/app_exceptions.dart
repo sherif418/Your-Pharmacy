@@ -18,6 +18,10 @@ class NetworkException extends AppException {
   NetworkException(super.message);
 }
 
+class EmailNotVerifiedException extends AppException {
+  EmailNotVerifiedException(super.message);
+}
+
 class DatabaseException extends AppException {
   DatabaseException(super.message);
 }

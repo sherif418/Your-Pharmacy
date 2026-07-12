@@ -2,6 +2,9 @@
 // Responsible for: the domain model that represents an authenticated user.
 // Used across the entire app — always read from AuthBloc state.
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class AppUser {
   final String uid;
   final String email;
@@ -30,11 +33,27 @@ class AppUser {
     );
   }
 
+  factory AppUser.fromFirebaseUser(User user) {
+    return AppUser(
+      uid: user.uid,
+      email: user.email ?? '',
+      name: user.displayName ?? '',
+      phone: user.phoneNumber ?? '',
+      role: 'customer',
+      village: '',
+    );
+  }
+
   Map<String, dynamic> toMap() => {
+        'uid': uid,
         'email': email,
         'name': name,
         'phone': phone,
         'role': role,
         'village': village,
+        'isActive': true,
+        'isVerified': true,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
       };
 }

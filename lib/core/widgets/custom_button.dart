@@ -38,6 +38,13 @@ class CustomButton extends StatelessWidget {
       height: AppSizes.buttonHeight,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
         child: isLoading
             ? const SizedBox(
                 width: AppSizes.iconMD,
@@ -58,13 +65,6 @@ class CustomButton extends StatelessWidget {
                     ],
                   )
                 : Text(label)),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
       ),
     );
   }

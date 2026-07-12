@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _QuickServiceButton(
                     icon: Icons.upload_file_rounded, label: 'رفع روشتة'),
                 _QuickServiceButton(
-                    icon: Icons.location_on_rounded, label: 'أقرب صيدلية'),
+                    icon: Icons.location_on_rounded, label: AppStrings.homePharmacyLocation),
                 _QuickServiceButton(
                     icon: Icons.medical_information_rounded, label: 'أدويتي'),
               ],

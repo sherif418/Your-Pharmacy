@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/core/constants/app_colors.dart';
 import 'package:flutter_application_1/core/constants/app_sizes.dart';
 import 'package:flutter_application_1/core/constants/app_strings.dart';
-import 'package:flutter_application_1/features/client(screens)/presentation/widgets/dashboard_card.dart';
 
 class NextMedicationCard extends StatelessWidget {
   /// The title shown for the next item.
