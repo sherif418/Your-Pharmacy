@@ -7,6 +7,7 @@ import 'package:flutter_application_1/core/constants/app_sizes.dart';
 import 'package:flutter_application_1/core/constants/app_strings.dart';
 import 'package:flutter_application_1/features/auth/domain/user.dart';
 import 'package:flutter_application_1/features/client(screens)/presentation/widgets/circle_icon_button.dart';
+import 'package:flutter_application_1/core/routes/app_routes.dart';
 
 class DashboardHeader extends StatelessWidget {
   /// The authenticated user shown in the greeting.
@@ -62,7 +63,7 @@ class DashboardHeader extends StatelessWidget {
           children: [
             CircleIconButton(
               icon: Icons.notifications_none_rounded,
-              onTap: () {},
+              onTap: () => Navigator.pushNamed(context, AppRoutes.notifications),
             ),
             if (notifCount > 0)
               Positioned(

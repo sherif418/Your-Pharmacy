@@ -3,5 +3,6 @@
 class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
-  // Add other routes here as needed
+  static const String emailVerification = '/email-verification';
+  static const String notifications = '/notifications';
 }

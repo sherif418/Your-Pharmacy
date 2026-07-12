@@ -21,6 +21,7 @@ import 'package:flutter_application_1/features/auth/presentation/screens/login_s
 import '/features/client(screens)/presentation/widgets/bottom_nav_bar.dart';
 import '/features/client(screens)/presentation/widgets/feature_card.dart';
 import 'package:flutter_application_1/service_locator.dart';
+import 'package:flutter_application_1/core/routes/app_routes.dart';
 
 class HomeScreen extends StatefulWidget {
   final AppUser user;
@@ -793,7 +794,7 @@ class _DashboardHeader extends StatelessWidget {
           children: [
             _CircleIconButton(
               icon: Icons.notifications_none_rounded,
-              onTap: () {},
+              onTap: () => Navigator.pushNamed(context, AppRoutes.notifications),
             ),
             if (notifCount > 0)
               Positioned(
